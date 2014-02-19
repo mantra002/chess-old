@@ -10,8 +10,9 @@ namespace Chess
         static void Main(string[] args)
         {
             Engine.Bitboards bb = new Engine.Bitboards();
-            bb.GenerateStartingBoard();
+            bb.GenerateStartingChess960Board();
             bb.PrintBoard();
+            Console.WriteLine();
             Console.Read();
         }
     }
