@@ -19,6 +19,7 @@ namespace Chess.Engine
         long BlackRook {get; set;}
         long BlackQueen {get; set;}
         long BlackKing {get; set;}
+        Random r = new Random();
         public void GenerateStartingBoard()
         {
             ArrayToBitboard(new char[][] {
@@ -36,7 +37,7 @@ namespace Chess.Engine
         {
             List<int> openSquares = new List<int>();
             openSquares.AddRange(new int[] { 0, 1, 2, 3, 4, 5, 6, 7 });
-            Random r = new Random();
+            
             char[][] baseBoard = new char[][] {
                 new char[] {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
                 new char[] {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
@@ -156,6 +157,24 @@ namespace Chess.Engine
                 {
                     line += "\n________________________________";
                     if(i != 0)
+                    {
+                        line += "\n| ";
+                    }
+                }
+            }
+            Console.WriteLine(line);
+        }
+        public void PrintBitboard(long board)
+        {
+            string strBoard = Convert.ToString(board, 2).PadLeft(64, '0');
+            string line = "| ";
+            for (int i = 63; i >= 0; i--)
+            {
+                line += strBoard[i] + " | ";
+                if (i % 8 == 0 && i != 63)
+                {
+                    line += "\n________________________________";
+                    if (i != 0)
                     {
                         line += "\n| ";
                     }
