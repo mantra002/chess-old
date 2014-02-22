@@ -9,12 +9,17 @@ namespace Chess
     {
         static void Main(string[] args)
         {
-            Engine.Bitboards bb = new Engine.Bitboards();
-            while(true)
-            {
-                bb.GenerateStartingChess960Board();
-                bb.PrintBoard();
-            }
+            Engine.BitBoards bb = new Engine.BitBoards();
+            bb.GenerateStartingBoard();
+            Engine.Moves.InitializeMoves();
+            Engine.Moves.GenerateValidMoves(bb, Engine.Reference.Color.White);
+            bb.PrintBitboard(Engine.Moves.ValidPawnMoves);
+            bb.PrintBitboard(Engine.Moves.ValidKnightMoves);
+            bb.PrintBitboard(Engine.Moves.ValidKingMoves);
+            bb.PrintBitboard(Engine.Moves.ValidQueenMoves);
+            bb.PrintBitboard(Engine.Moves.ValidRookMoves);
+            bb.PrintBitboard(Engine.Moves.ValidBishopMoves);
+            Console.Read();
         }
     }
 }

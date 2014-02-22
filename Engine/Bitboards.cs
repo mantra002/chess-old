@@ -5,22 +5,22 @@ using System.Text;
 
 namespace Chess.Engine
 {
-    class Bitboards
+    internal sealed class BitBoards
     {
-        long WhitePawn {get; set;}
-        long WhiteKnight {get; set;}
-        long WhiteBishop {get; set;}
-        long WhiteRook {get; set;}
-        long WhiteQueen {get; set;}
-        long WhiteKing {get; set;}
-        long BlackPawn {get; set;}
-        long BlackKnight {get; set;}
-        long BlackBishop {get; set;}
-        long BlackRook {get; set;}
-        long BlackQueen {get; set;}
-        long BlackKing {get; set;}
-        Random r = new Random();
-        public void GenerateStartingBoard()
+        internal long WhitePawn { get; set; }
+        internal long WhiteKnight { get; set; }
+        internal long WhiteBishop { get; set; }
+        internal long WhiteRook { get; set; }
+        internal long WhiteQueen { get; set; }
+        internal long WhiteKing { get; set; }
+        internal long BlackPawn { get; set; }
+        internal long BlackKnight { get; set; }
+        internal long BlackBishop { get; set; }
+        internal long BlackRook { get; set; }
+        internal long BlackQueen { get; set; }
+        internal long BlackKing { get; set; }
+        private Random r = new Random();
+        internal void GenerateStartingBoard()
         {
             ArrayToBitboard(new char[][] {
                 new char[] {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
@@ -33,7 +33,20 @@ namespace Chess.Engine
                 new char[] {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}
             });
         }
-        public void GenerateStartingChess960Board()
+        internal void GenerateTestBoard()
+        {
+            ArrayToBitboard(new char[][] {
+                new char[] {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'N'},
+                new char[] {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                new char[] {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                new char[] {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                new char[] {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                new char[] {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                new char[] {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+                new char[] {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
+            });
+        }
+        internal void GenerateStartingChess960Board()
         {
             List<int> openSquares = new List<int>();
             openSquares.AddRange(new int[] { 0, 1, 2, 3, 4, 5, 6, 7 });
@@ -81,7 +94,7 @@ namespace Chess.Engine
             board[7][i] = peice.ToString().ToUpper().ToCharArray()[0];
             openSpots.Remove(i);
         }
-        public void ClearBoards()
+        private void ClearBoards()
         {
             this.BlackRook = 0;
             this.BlackKnight = 0;
@@ -96,7 +109,7 @@ namespace Chess.Engine
             this.WhiteKing = 0;
             this.WhitePawn = 0;
         }
-        public void ArrayToBitboard(char[][] board)
+        private void ArrayToBitboard(char[][] board)
         {
             this.ClearBoards();
             for(int i = 0; i < 64; i++)
@@ -146,7 +159,7 @@ namespace Chess.Engine
                 }
             }
         }
-        public void PrintBoard()
+        internal void PrintBoard()
         {
             char[][] board = BitboardsToArray();
             string line = "| ";
@@ -155,7 +168,7 @@ namespace Chess.Engine
                 line += board[i / 8][i % 8] + " | ";
                 if (i % 8 == 0 && i != 63)
                 {
-                    line += "\n________________________________";
+                    line += "\n--------------------------------";
                     if(i != 0)
                     {
                         line += "\n| ";
@@ -163,8 +176,9 @@ namespace Chess.Engine
                 }
             }
             Console.WriteLine(line);
+            Console.WriteLine();
         }
-        public void PrintBitboard(long board)
+        internal void PrintBitboard(long board)
         {
             string strBoard = Convert.ToString(board, 2).PadLeft(64, '0');
             string line = "| ";
@@ -173,7 +187,7 @@ namespace Chess.Engine
                 line += strBoard[i] + " | ";
                 if (i % 8 == 0 && i != 63)
                 {
-                    line += "\n________________________________";
+                    line += "\n--------------------------------";
                     if (i != 0)
                     {
                         line += "\n| ";
@@ -181,8 +195,24 @@ namespace Chess.Engine
                 }
             }
             Console.WriteLine(line);
+            Console.WriteLine();
         }
-        public char[][] BitboardsToArray()
+        internal void FlipBoards()
+        {
+            WhitePawn = FlipVertical(WhitePawn);
+            WhiteBishop = FlipVertical(WhiteBishop);
+            WhiteKnight = FlipVertical(WhiteKnight);
+            WhiteRook = FlipVertical(WhiteRook);
+            WhiteQueen = FlipVertical(WhiteQueen);
+            WhiteKnight = FlipVertical(WhiteKnight);
+            BlackPawn = FlipVertical(BlackPawn);
+            BlackBishop = FlipVertical(BlackBishop);
+            BlackKnight = FlipVertical(BlackKnight);
+            BlackRook = FlipVertical(BlackRook);
+            BlackQueen = FlipVertical(BlackQueen);
+            BlackKnight = FlipVertical(BlackKnight);
+        }
+        private char[][] BitboardsToArray()
         {
             char[][] board = new char[8][];
             for (int i = 0; i < 8; i++)
@@ -246,6 +276,17 @@ namespace Chess.Engine
                     }
                 }
             return board;
+        }
+        private static long FlipVertical(long x)
+        {
+            return ((x << 56)) |
+                    ((x << 40) & (long)(0x00ff000000000000)) |
+                    ((x << 24) & (long)(0x0000ff0000000000)) |
+                    ((x << 8) & (long)(0x000000ff00000000)) |
+                    ((x >> 8) & (long)(0x00000000ff000000)) |
+                    ((x >> 24) & (long)(0x0000000000ff0000)) |
+                    ((x >> 40) & (long)(0x000000000000ff00)) |
+                    ((x >> 56));
         }
     }
 }
