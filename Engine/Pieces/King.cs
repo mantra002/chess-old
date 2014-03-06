@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Chess.Engine
+namespace Chess.Engine.Pieces
 {
-    internal static class Evaluate
+    class King
     {
-
     }
 }
